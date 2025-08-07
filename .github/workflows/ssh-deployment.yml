@@ -18,10 +18,11 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add Remote Server fingerprint to Known Hosts
-        run: ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts || true
+       # run: ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts || true
+        run: ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Create .env file
-        run: |
+        run: | 
           echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env
           echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
           echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
@@ -40,11 +41,11 @@ jobs:
       - name: Docker Image push
         run: docker compose push
 
-      - name: Deploy to Remote Server
-        run: |
-          ssh -p ${{ secrets.SSH_PORT }} @${{ secrets.SSH_HOST }} 
-            cd /path/to/your/project
-            docker compose pull
-            docker compose down
-            docker compose up -d
-          '
+      # - name: Deploy to Remote Server
+      #   run: |
+      #     ssh -p ${{ secrets.SSH_PORT }} @${{ secrets.SSH_HOST }} 
+      #       cd /path/to/your/project
+      #       docker compose pull
+      #       docker compose down
+      #       docker compose up -d
+      #     '
