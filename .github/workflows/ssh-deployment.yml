@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy to Remote Server
         run: |
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+          ssh -p ${{ secrets.SSH_PORT }} @${{ secrets.SSH_HOST }} 
             cd /path/to/your/project
             docker compose pull
             docker compose down
