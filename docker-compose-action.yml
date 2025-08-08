@@ -1,0 +1,64 @@
+# docker-compose-actions.yml
+services:
+  db:
+    container_name: db-container
+    image: mysql:8.0
+    volumes:
+      - db-volume:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - db-connect
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  backend:
+    container_name: backend-container
+    build:
+      context: ./backend
+      # BuildKit 캐시 설정
+      # 캐시 불러올 폴더
+      cache_from:
+        - type=local,src=/tmp/.buildx-cache/backend
+      # 캐시 저장할 폴더
+      cache_to:
+        - type=local,dest=/tmp/.buildx-cache/backend,mode=max
+    image: [도커허브 Username]/backend:latest
+    env_file:
+      - .env
+    networks:
+      - db-connect
+      - backend-connect
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    container_name: frontend-container
+    build:
+      context: ./frontend
+      # BuildKit 캐시 설정
+      cache_from:
+        - type=local,src=/tmp/.buildx-cache/frontend
+      cache_to:
+        - type=local,dest=/tmp/.buildx-cache/frontend,mode=max
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    image: [도커허브 Username]/frontend:latest
+    ports:
+      - "80:80"
+    networks:
+      - backend-connect
+    depends_on:
+      - backend
+
+volumes:
+  db-volume:
+
+networks:
+  db-connect:
+  backend-connect:
