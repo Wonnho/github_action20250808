@@ -41,11 +41,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "docer-compose.yml,.env"
-          target: "~/work-directory"
+          source: "docker-compose.yml,.env"
+          target: "~/work-directory/"
 
       - name: Pull Image & Up Container
-        uses: appleboy/ssh-action@v1.0.3  # Note: should be ssh-action, not scp-action
+        uses: appleboy/ssh-action@v1.0.3 # Note: should be ssh-action, not scp-action
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
