@@ -1,4 +1,4 @@
-name: deploy service
+name: deployment service
 on:
   push:
     branches:
