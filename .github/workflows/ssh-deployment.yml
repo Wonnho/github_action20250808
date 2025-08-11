@@ -41,7 +41,7 @@ jobs:
         run: docker compose push
 
       - name: Copy deployment files
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
